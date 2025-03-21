@@ -1,8 +1,9 @@
 #include <iostream>
+#define BUFLEN 10
 using namespace std;
 int main(int argc, char *argv[])
 {
-    int arr[10];
+    int arr[BUFLEN];
     int i;
 
     for (i=0; i<10; i++) {
