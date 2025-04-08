@@ -16,7 +16,12 @@ unsigned int b2u(char *bv);
 int b2s(char *bv);
 int b2o(char *bv);
 int b2t(char *bv);
-int exp(int b, int e);
+
+void bit_addition(char *bv1, char *bv2, char *result);
+unsigned int unsigned_addition(char *bv1, char *bv2);
+int twos_complement_addition(char *bv1, char *bv2);
+int ones_complement_addition(char *bv1, char *bv2);
+int sign_magnitude_addition(char *bv1, char *bv2);
 
 int main(int argc, char *argv[])
 {
@@ -38,15 +43,21 @@ int main(int argc, char *argv[])
     init_bit_vector(argv[1], bv1);
     init_bit_vector(argv[2], bv2);
     print_bit_vector(bv1);
-    printf(" = B2U: %u\n", b2u(bv1));
-    printf(" = B2S: %u\n", b2s(bv1));
-    printf(" = B2O: %u\n", b2o(bv1));
-    printf(" = B2T: %u\n", b2t(bv1));
+    printf(" - B2U: %u\n", b2u(bv1));
+    printf(" - B2S: %u\n", b2s(bv1));
+    printf(" - B2O: %u\n", b2o(bv1));
+    printf(" - B2T: %u\n", b2t(bv1));
     print_bit_vector(bv2);
-    printf(" = B2U: %u\n", b2u(bv2));
-    printf(" = B2S: %u\n", b2s(bv2));
-    printf(" = B2O: %u\n", b2o(bv2));
-    printf(" = B2T: %u\n", b2t(bv2));
+    printf(" - B2U: %u\n", b2u(bv2));
+    printf(" - B2S: %u\n", b2s(bv2));
+    printf(" - B2O: %u\n", b2o(bv2));
+    printf(" - B2T: %u\n", b2t(bv2));
+
+    printf("Addition >>> \n");
+    printf(" - Unsigned addition: %u\n", unsigned_addition(bv1, bv2));
+    printf(" - Signed magnitude addition: %d\n", sign_magnitude_addition(bv1, bv2));
+    printf(" - One's complement addition: %d\n", ones_complement_addition(bv1, bv2));
+    printf(" - Two's complement addition: %d\n", twos_complement_addition(bv1, bv2));
     return 0;
 }
 
@@ -164,4 +175,64 @@ int b2t(char *bv)
         ret += bv[i] * exp(2, i);
     ret += term;
     return ret;
+}
+
+void bit_addition(char *bv1, char *bv2, char *result)
+{
+    int i;
+    char sum;
+    char carry[BIT_VECTOR_LENGTH + 1] = {0, };
+
+    for (i=LSB_INDEX; i<MSB_INDEX; i++)
+    {
+        sum = bv1[i] + bv2[i] + carry[i];
+        if (sum == 0)
+        {
+            result[i] = 0;
+            carry[i+1] = 0;
+        }
+        else if (sum == 1)
+        {
+            result[i] = 1;
+            carry[i+1] = 0;
+        }
+        else if (sum == 2)
+        {
+            result[i] = 0;
+            carry[i+1] = 1;
+        }
+        else
+        {
+            result[i] = 1;
+            carry[i+1] = 1;
+        }  
+    }
+}
+
+unsigned int unsigned_addition(char *bv1, char *bv2)
+{
+    char result[BIT_VECTOR_LENGTH];
+    bit_addition(bv1, bv2, result);
+    return b2u(result);
+}
+
+int twos_complement_addition(char *bv1, char *bv2)
+{
+    char result[BIT_VECTOR_LENGTH];
+    bit_addition(bv1, bv2, result);
+    return b2t(result);
+}
+
+int ones_complement_addition(char *bv1, char *bv2)
+{
+    char result[BIT_VECTOR_LENGTH];
+    bit_addition(bv1, bv2, result);
+    return b2o(result);
+}
+
+int sign_magnitude_addition(char *bv1, char *bv2)
+{
+    char result[BIT_VECTOR_LENGTH];
+    bit_addition(bv1, bv2, result);
+    return b2t(result);
 }
