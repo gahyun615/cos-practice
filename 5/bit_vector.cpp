@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 #define BIT_VECTOR_LENGTH 4
+// #define BIT_VECTOR_LENGTH 8
 #define MSB_INDEX BIT_VECTOR_LENGTH - 1
 #define LSB_INDEX 0
 #define TRUE 1
