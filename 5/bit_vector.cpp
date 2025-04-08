@@ -7,7 +7,7 @@
 
 void print_command(char *argv[]);
 int check_validity(char *input);
-void int_bit_vector(char *input, char *bv);
+void init_bit_vector(char *input, char *bv);
 void print_bit_vector(char *bv);
 
 int main(int argc, char *argv[])
@@ -20,5 +20,38 @@ int main(int argc, char *argv[])
         print("Error: invalid number of arguments\n");
         print_command(argv);
     }
+    
+    if (!(check_validity(argv[1]) && check_validity(argv[2])))
+    {
+        printf("Error: invalid argument\n");
+        print_command(argv);
+    }
+
+    init_bit_vector(argv[1], bv1);
+    init_bit_vector(argv[2], bv2);
+    print_bit_vector(bv1);
+    print_bit_vector(bv2);
+    return 0;
+}
+
+void print_command(char *argv[])
+{
+    printf("Command: %s <fisrt bit vector> <second bit vector>", argv[0]);
+    printf("Example: %s 0110 1000\n", argv[0]);
+    exit(1);
+}
+
+int check_validity(char *input)
+{
+
+}
+
+void init_bit_vector(char *input, char *bv)
+{
+
+}
+
+void print_bit_vector(char *bv)
+{
     
 }
