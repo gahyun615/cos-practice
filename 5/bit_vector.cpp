@@ -12,6 +12,12 @@ int check_validity(char *input);
 void init_bit_vector(char *input, char *bv);
 void print_bit_vector(char *bv);
 
+unsigned int b2u(char *bv);
+int b2s(char *bv);
+int b2o(char *bv);
+int b2t(char *bv);
+int exp(int b, int e);
+
 int main(int argc, char *argv[])
 {
     char bv1[BIT_VECTOR_LENGTH];
@@ -32,7 +38,15 @@ int main(int argc, char *argv[])
     init_bit_vector(argv[1], bv1);
     init_bit_vector(argv[2], bv2);
     print_bit_vector(bv1);
+    printf(" = B2U: %u\n", b2u(bv1));
+    printf(" = B2S: %u\n", b2s(bv1));
+    printf(" = B2O: %u\n", b2o(bv1));
+    printf(" = B2T: %u\n", b2t(bv1));
     print_bit_vector(bv2);
+    printf(" = B2U: %u\n", b2u(bv2));
+    printf(" = B2S: %u\n", b2s(bv2));
+    printf(" = B2O: %u\n", b2o(bv2));
+    printf(" = B2T: %u\n", b2t(bv2));
     return 0;
 }
 
@@ -79,6 +93,8 @@ void init_bit_vector(char *input, char *bv)
             bv[MSB_INDEX - i] = 0;
         else
             bv[MSB_INDEX - i] = 1;
+        // bv[MSB_INDEX - i] = (c == '1');
+        // bv[MSG_INDEX - i] = c - '0';
     }
 }
 
@@ -92,4 +108,60 @@ void print_bit_vector(char *bv)
         printf("%d", bv[i]);
     }
     printf("\n");
+}
+
+int exp(int b, int e)
+{
+    int i, ret;
+    ret = 1;
+    for (i=0; i<e; i++)
+        ret *= b;
+    return ret;
+}
+
+unsigned int b2u(char *bv)
+{
+    int i;
+    unsigned int ret;
+    ret = 0;
+
+    for (i=LSB_INDEX; i<=MSB_INDEX; i++)
+        ret += bv[i] * exp(2, i);
+    return ret;
+}
+
+int b2s(char *bv)
+{
+    int i, sign, ret;
+    ret = 0;
+    sign = exp(-1, bv[MSB_INDEX]);
+
+    for (i=LSB_INDEX; i<MSB_INDEX; i++)
+        ret += bv[i] * exp(2, i);
+    ret *= sign;
+    return ret;
+}
+
+int b2o(char *bv)
+{
+    int i, term, ret;
+    ret = 0;
+
+    term = -1 * bv[MSB_INDEX] * (exp(2, MSB_INDEX) - 1);
+    for (i=LSB_INDEX; i<MSB_INDEX; i++)
+        ret += bv[i] * exp(2, i);
+    ret += term;
+    return ret;
+}
+
+int b2t(char *bv)
+{
+    int i, term, ret;
+    ret = 0;
+
+    term = -1 * bv[MSB_INDEX] * exp(2, MSB_INDEX);
+    for (i=LSB_INDEX; i<MSB_INDEX; i++)
+        ret += bv[i] * exp(2, i);
+    ret += term;
+    return ret;
 }
