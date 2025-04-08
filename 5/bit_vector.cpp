@@ -4,6 +4,8 @@
 #define BIT_VECTOR_LENGTH 4
 #define MSB_INDEX BIT_VECTOR_LENGTH - 1
 #define LSB_INDEX 0
+#define TRUE 1
+#define FALSE 0
 
 void print_command(char *argv[]);
 int check_validity(char *input);
@@ -17,7 +19,7 @@ int main(int argc, char *argv[])
 
     if (argc != 3)
     {
-        print("Error: invalid number of arguments\n");
+        printf("Error: invalid number of arguments\n");
         print_command(argv);
     }
     
@@ -43,7 +45,24 @@ void print_command(char *argv[])
 
 int check_validity(char *input)
 {
+    int i, len, ret;
+    ret = TRUE;
 
+    // 1. the lenth of the input must be identical to BIT_VECTOR_LENGTH
+    len = strlen(input);
+    if (len != BIT_VECTOR_LENGTH)
+        ret = FALSE;
+
+    // 2. the bits must be either of 0 or 1
+    for (i=0; i<len; i++)
+    {
+        if (!(input[i] == '0' || input[i] == '1'))
+        {
+            ret = FALSE;
+            break;
+        }
+    }
+    return ret;
 }
 
 void init_bit_vector(char *input, char *bv)
@@ -53,5 +72,5 @@ void init_bit_vector(char *input, char *bv)
 
 void print_bit_vector(char *bv)
 {
-    
+
 }
