@@ -2,6 +2,10 @@
 #include <cstdlib>
 using namespace std;
 
+int mod(int a, int b);
+int slen(char *snum);
+int convert(char *snum);
+
 int main(int argc, char *argv[])
 {
     int a, b, c;
@@ -44,7 +48,7 @@ int slen(char *snum)
 
 int convert(char *snum)
 {
-    int len
+    int len;
     int i, ret;
     int sign;
     char *p;
