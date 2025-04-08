@@ -67,10 +67,29 @@ int check_validity(char *input)
 
 void init_bit_vector(char *input, char *bv)
 {
+    // "0101" -> bv[0] = 1, bv[1] = 0, bv[2] = 1, bv[3] = 0
+    char c;
+    int i, len;
+    len = strlen(input);
 
+    for (i=0; i<len; i++)
+    {
+        c = input[i];
+        if (c == '0')
+            bv[MSB_INDEX - i] = 0;
+        else
+            bv[MSB_INDEX - i] = 1;
+    }
 }
 
 void print_bit_vector(char *bv)
 {
-
+    int i;
+    
+    printf("Bit vector: ");
+    for (i=MSB_INDEX; i>=LSB_INDEX; i--)
+    {
+        printf("%d", bv[i]);
+    }
+    printf("\n");
 }
